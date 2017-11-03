@@ -4,6 +4,7 @@ Feature: Booking
   I
 
   Scenario: Book
-    Given a
-    When b
-    Then c
+    Given I am in home page
+    When I select a city
+    And I select a date
+    And I click Explore button
