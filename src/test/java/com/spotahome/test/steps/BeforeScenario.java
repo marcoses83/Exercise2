@@ -1,6 +1,6 @@
 package com.spotahome.test.steps;
 
-import com.spotahome.test.pages.Browser;
+import com.spotahome.test.helper.Browser;
 import com.spotahome.test.steps.world.StepsWorld;
 import cucumber.api.java.Before;
 

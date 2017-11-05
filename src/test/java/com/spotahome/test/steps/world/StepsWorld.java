@@ -1,6 +1,6 @@
 package com.spotahome.test.steps.world;
 
-import com.spotahome.test.pages.Browser;
+import com.spotahome.test.helper.Browser;
 
 public class StepsWorld {
 

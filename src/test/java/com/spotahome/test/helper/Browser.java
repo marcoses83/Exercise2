@@ -1,5 +1,6 @@
-package com.spotahome.test.pages;
+package com.spotahome.test.helper;
 
+import com.spotahome.test.pages.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,13 +11,13 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.concurrent.TimeUnit;
 
 public class Browser {
-    protected static WebDriver driver;
+    private static WebDriver driver;
+
+    public Browser() {
+        initialize();
+    }
 
     public void navigateTo(String url) {
-        if (driver == null) {
-            initialize();
-        }
-
         driver.navigate().to(url);
     }
 
@@ -25,10 +26,6 @@ public class Browser {
     }
 
     public <T> T getPage(Class<T> classType) {
-        if (driver == null) {
-            initialize();
-        }
-
         try {
             T page = classType.getConstructor().newInstance();
             ((BasePage) page).setBrowser(this);
@@ -40,6 +37,10 @@ public class Browser {
         }
     }
 
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
     private void initialize() {
         driver = CreateChromeDriver(); //Choose desired webdriver
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -49,6 +50,7 @@ public class Browser {
         System.setProperty("webdriver.chrome.driver", "C:/webdrivers/chromedriver.exe");
 
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("start-maximized");
         //Setup desired options here
 
         return new ChromeDriver(options);

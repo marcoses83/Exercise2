@@ -1,7 +1,9 @@
 package com.spotahome.test.steps;
 
-import com.spotahome.test.pages.Browser;
+import com.spotahome.test.helper.Browser;
 import com.spotahome.test.pages.Home;
+import com.spotahome.test.pages.RoomDetail;
+import com.spotahome.test.pages.Rooms;
 import com.spotahome.test.steps.world.StepsWorld;
 
 public class BaseStep {
@@ -21,5 +23,13 @@ public class BaseStep {
 
     public Home getHome() {
         return world.getBrowser().getPage(Home.class);
+    }
+
+    public Rooms getRooms() {
+        return world.getBrowser().getPage(Rooms.class);
+    }
+
+    public RoomDetail getRoomDetail() {
+        return world.getBrowser().getPage(RoomDetail.class);
     }
 }
