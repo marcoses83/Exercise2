@@ -1,5 +1,7 @@
 package com.spotahome.test.pages;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -20,13 +22,19 @@ public class RoomDetail extends BasePage {
     @FindBy(className = "datepicker-message datepicker-message--valid-dates")
     private WebElement validDatesMessage;
 
-    @FindBy(xpath = "//span[@class='datepicker-message__description']//span/i[0]")
+    @FindBy(xpath = "//span[@class='datepicker-message__description']//i[2]")
     private WebElement validFromDate;
 
-    @FindBy(xpath = "//span[@class='datepicker-message__description']//span/i[1]")
+    @FindBy(xpath = "//span[@class='datepicker-message__description']//i[2]")
     private WebElement validToDate;
 
-    public boolean areSelectedDatesValid() {
+    @FindBy(css = "div.booknow-card--body-dates")
+    private WebElement dateSelector;
+
+    @FindBy(css = "a.button--book-now")
+    private WebElement bookNowButton;
+
+    public boolean xxx() {
         String selectedFromDateString = getBrowser().getCurrentUrl().split("\\?")[1].split("&")[0].split("=")[1];
         LocalDate selectedFromDate = LocalDate.parse(selectedFromDateString);
         String selectedToDateString = getBrowser().getCurrentUrl().split("\\?")[1].split("&")[1].split("=")[1];
@@ -79,6 +87,26 @@ public class RoomDetail extends BasePage {
     }
 
     public void selectValidDates() {
+        LocalDate fromDate = LocalDate.parse(validFromDate.getText());
+        LocalDate toDate = LocalDate.parse(validToDate.getText());
 
+
+    }
+
+    public boolean areSelectedDatesValid() {
+        //return getBrowser().getDriver().findElements(By.cssSelector("a.button--book-now")).size() > 0;
+        boolean isBookNowDisplayed = false;
+        try {
+            isBookNowDisplayed = bookNowButton.isDisplayed();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return isBookNowDisplayed;
+    }
+
+    public void book() {
+        ((JavascriptExecutor)getBrowser().getDriver()).executeScript("arguments[0].scrollIntoView(true);", dateSelector);
+        bookNowButton.click();
     }
 }

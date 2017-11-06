@@ -8,9 +8,12 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.runners.JUnit4;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Booking extends BaseStep {
@@ -52,8 +55,8 @@ public class Booking extends BaseStep {
         LocalDate fromDate = randomDate(LocalDate.now());
         LocalDate toDate = randomDate(fromDate);
 
-        getHome().selectFromDate(fromDate.getYear(), fromDate.getMonth(), fromDate.getDayOfMonth());
-        getHome().selectToDate(toDate.getYear(), toDate.getMonth(), toDate.getDayOfMonth());
+        getHome().selectDateFrom(fromDate.getYear(), fromDate.getMonth().ordinal(), fromDate.getDayOfMonth());
+        getHome().selectDateTo(toDate.getYear(), toDate.getMonth().ordinal(), toDate.getDayOfMonth());
     }
 
     @When("^I click Explore button$")
@@ -68,9 +71,15 @@ public class Booking extends BaseStep {
 
     @When("^I select a date and book$")
     public void iSelectADateAndBook() throws Throwable {
+        ArrayList<String> tabs2 = new ArrayList<String>(getBrowser().getDriver().getWindowHandles());
+        getBrowser().getDriver().switchTo().window(tabs2.get(1));
+        //getBrowser().getDriver().close();
+        //getBrowser().getDriver().switchTo().window(tabs2.get(0));
         if (!getRoomDetail().areSelectedDatesValid()) {
             getRoomDetail().selectValidDates();
         }
+
+        getRoomDetail().book();
     }
 
     private LocalDate randomDate(LocalDate start) {

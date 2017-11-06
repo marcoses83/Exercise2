@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class Rooms extends BasePage {
     @FindBy(className = "l-list__item")
-    List<WebElement> roomResults;
+    private List<WebElement> roomResults;
 
     public void selectRoom() {
         WebElement room = roomResults.get(new Random().ints(0, roomResults.size() - 1).findFirst().getAsInt());

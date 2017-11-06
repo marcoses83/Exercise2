@@ -1,6 +1,6 @@
 package com.spotahome.test.pages;
 
-import com.spotahome.test.helper.Browser;
+import com.spotahome.test.framework.Browser;
 
 public class BasePage {
     private Browser browser;

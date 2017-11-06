@@ -1,4 +1,4 @@
-package com.spotahome.test.helper;
+package com.spotahome.test.framework;
 
 import com.spotahome.test.pages.BasePage;
 import org.openqa.selenium.WebDriver;
@@ -39,6 +39,10 @@ public class Browser {
 
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
+    }
+
+    public WebDriver getDriver() {
+        return driver;
     }
 
     private void initialize() {
