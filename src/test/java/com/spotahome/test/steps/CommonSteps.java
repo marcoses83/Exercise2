@@ -13,19 +13,22 @@ public class CommonSteps extends BaseStep {
 
     @Then("^I should be at \"([^\"]*)\" page$")
     public void iShouldBeAtPage(String pageName) throws Throwable {
-        Pattern pattern;
+        String stringToMatch = "";
+        StringBuilder sb = new StringBuilder("https://staging.spotahome.com/");
 
         switch (pageName) {
             case "Rooms":
-                pattern = Pattern.compile("");
+                sb.append(getContextValue("selectedCity")).append("?").append("move-in=");
+                stringToMatch = sb.toString();
+                break;
             case "Booking":
-                pattern = Pattern.compile("https://staging.spotahome.com/booking");
+                sb.append("booking/").append(getContextValue("selectedCity"));
+                stringToMatch = sb.toString();
                 break;
             default:
-                pattern = Pattern.compile("");
                 break;
         }
 
-        Assert.assertTrue(pattern.matcher(getBrowser().getCurrentUrl()).find());
+        Assert.assertTrue(getBrowser().getCurrentUrl().contains(stringToMatch));
     }
 }
