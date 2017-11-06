@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.Random;
 
 public class DateRandomizer {
+    final static int MAX_DATE_RANGE_IN_DAYS = 365 * 10;
+    final static int MIN_DATE_RANGE_IN_DAYS = 30;
+
     public static LocalDate randomDate(LocalDate start) {
-        final int MAX_DATE_RANGE_IN_DAYS = 365 * 10;
-        final int MIN_DATE_RANGE_IN_DAYS = 30;
         int daysToAdd = new Random().ints(MIN_DATE_RANGE_IN_DAYS, MAX_DATE_RANGE_IN_DAYS + 1).findFirst().getAsInt();
         return start.plusDays(daysToAdd);
     }
@@ -17,7 +18,13 @@ public class DateRandomizer {
     }
 
     public static LocalDate randomDate(LocalDate start, int minStay, int maxStay) {
-        int daysToAdd = new Random().ints(minStay, maxStay + 1).findFirst().getAsInt();
+        int daysToAdd;
+
+        if (maxStay >= minStay) {
+            daysToAdd = new Random().ints(minStay, maxStay + 1).findFirst().getAsInt();
+        } else {
+            daysToAdd = new Random().ints(minStay, MAX_DATE_RANGE_IN_DAYS + 1).findFirst().getAsInt();
+        }
         return start.plusDays(daysToAdd);
     }
 }

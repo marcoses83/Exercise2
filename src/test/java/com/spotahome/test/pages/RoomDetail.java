@@ -3,9 +3,12 @@ package com.spotahome.test.pages;
 import com.spotahome.test.framework.DatePicker;
 import com.spotahome.test.framework.DateRandomizer;
 import com.spotahome.test.framework.WebElementExtension;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,10 +20,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RoomDetail extends BasePage {
-    @FindBy(xpath = "//div[@class='room--minmaxstay']/div[@class='apartment-info-item'][0]")
+    @FindBy(xpath = "//div[@class='room--minmaxstay']/div[@class='apartment-info--item'][1]")
     private WebElement minStay;
 
-    @FindBy(xpath = "//div[@class='room--minmaxstay']/div[@class='apartment-info-item'][1]")
+    @FindBy(xpath = "//div[@class='room--minmaxstay']/div[@class='apartment-info--item'][2]")
     private WebElement maxStay;
 
     @FindBy(xpath = "//span[@class='datepicker-message__description']//i[1]")
@@ -53,6 +56,7 @@ public class RoomDetail extends BasePage {
 
     public void book() {
         ((JavascriptExecutor)getBrowser().getDriver()).executeScript("arguments[0].scrollIntoView(true);", dateSelector);
+        new WebDriverWait(getBrowser().getDriver(), 10).until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.booknow--spinner-loader")));
         bookNowButton.click();
     }
 
