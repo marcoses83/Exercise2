@@ -18,10 +18,10 @@ public class StepsWorld {
     }
 
     public void addValue (String key, Object value) {
-        this.contextValues.put(key, value);
+        contextValues.put(key, value);
     }
 
     public Object getValue (String key) {
-        return this.contextValues.get(key);
+        return contextValues.get(key);
     }
 }

@@ -6,34 +6,34 @@ import com.spotahome.test.pages.RoomDetail;
 import com.spotahome.test.pages.Rooms;
 import com.spotahome.test.steps.world.StepsWorld;
 
-public class BaseStep {
+class BaseStep {
     private StepsWorld world;
 
-    public BaseStep(StepsWorld world) {
+    BaseStep(StepsWorld world) {
         this.world = world;
     }
 
-    public Browser getBrowser() {
-        return this.world.getBrowser();
+    Browser getBrowser() {
+        return world.getBrowser();
     }
 
-    public void setBrowser(Browser browser) {
-        this.world.setBrowser(browser);
+    void setBrowser(Browser browser) {
+        world.setBrowser(browser);
     }
 
-    public Object getContextValue(String key) { return this.world.getValue(key); }
+    Object getContextValue(String key) { return world.getValue(key); }
 
-    public void addContextValue(String key, Object value) { this.world.addValue(key, value); }
+    void addContextValue(String key, Object value) { world.addValue(key, value); }
 
-    public Home getHome() {
-        return this.world.getBrowser().getPage(Home.class);
+    Home getHome() {
+        return world.getBrowser().getPage(Home.class);
     }
 
-    public Rooms getRooms() {
-        return this.world.getBrowser().getPage(Rooms.class);
+    Rooms getRooms() {
+        return world.getBrowser().getPage(Rooms.class);
     }
 
-    public RoomDetail getRoomDetail() {
-        return this.world.getBrowser().getPage(RoomDetail.class);
+    RoomDetail getRoomDetail() {
+        return world.getBrowser().getPage(RoomDetail.class);
     }
 }

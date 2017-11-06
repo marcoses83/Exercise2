@@ -2,6 +2,7 @@ package com.spotahome.test.steps;
 
 import com.spotahome.test.steps.world.StepsWorld;
 import cucumber.api.java.en.Then;
+import org.junit.Assert;
 
 public class CommonSteps extends BaseStep {
     public CommonSteps(StepsWorld world) {
@@ -20,6 +21,6 @@ public class CommonSteps extends BaseStep {
                 break;
         }
 
-        assert(getBrowser().getCurrentUrl().contains(stringToMatch));
+        Assert.assertTrue(getBrowser().getCurrentUrl().contains(stringToMatch));
     }
 }

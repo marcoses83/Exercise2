@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class Browser {
@@ -22,7 +23,13 @@ public class Browser {
     }
 
     public void close() {
-        driver.close();
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        for (String tab:tabs) {
+            driver.switchTo().window(tab);
+            driver.close();
+        }
+
+        driver.quit();
     }
 
     public <T> T getPage(Class<T> classType) {
@@ -35,6 +42,11 @@ public class Browser {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public void switchTab(int position) {
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(position));
     }
 
     public String getCurrentUrl() {

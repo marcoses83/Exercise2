@@ -1,7 +1,7 @@
 Feature: Booking
-  So
-  As
-  I
+  So I can rest in a comfortable place
+  As a Spotahome user
+  I want to be able to book a home
 
   Scenario: Book
     Given I am in home page

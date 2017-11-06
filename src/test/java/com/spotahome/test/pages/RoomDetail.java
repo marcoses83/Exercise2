@@ -1,11 +1,18 @@
 package com.spotahome.test.pages;
 
-import org.openqa.selenium.By;
+import com.spotahome.test.framework.DatePicker;
+import com.spotahome.test.framework.DateRandomizer;
+import com.spotahome.test.framework.WebElementExtension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,17 +23,11 @@ public class RoomDetail extends BasePage {
     @FindBy(xpath = "//div[@class='room--minmaxstay']/div[@class='apartment-info-item'][1]")
     private WebElement maxStay;
 
-    @FindBy(className = "room--availability")
-    private WebElement availabilityDate;
-
-    @FindBy(className = "datepicker-message datepicker-message--valid-dates")
-    private WebElement validDatesMessage;
+    @FindBy(xpath = "//span[@class='datepicker-message__description']//i[1]")
+    private WebElement validDateFrom;
 
     @FindBy(xpath = "//span[@class='datepicker-message__description']//i[2]")
-    private WebElement validFromDate;
-
-    @FindBy(xpath = "//span[@class='datepicker-message__description']//i[2]")
-    private WebElement validToDate;
+    private WebElement validDateTo;
 
     @FindBy(css = "div.booknow-card--body-dates")
     private WebElement dateSelector;
@@ -34,79 +35,54 @@ public class RoomDetail extends BasePage {
     @FindBy(css = "a.button--book-now")
     private WebElement bookNowButton;
 
-    public boolean xxx() {
-        String selectedFromDateString = getBrowser().getCurrentUrl().split("\\?")[1].split("&")[0].split("=")[1];
-        LocalDate selectedFromDate = LocalDate.parse(selectedFromDateString);
-        String selectedToDateString = getBrowser().getCurrentUrl().split("\\?")[1].split("&")[1].split("=")[1];
-        LocalDate selectedToDate = LocalDate.parse(selectedToDateString);
-
-        if (validDatesMessage.isDisplayed()) {
-            LocalDate fromDate = LocalDate.parse(validFromDate.getText());
-            LocalDate toDate = LocalDate.parse(validToDate.getText());
-
-            if (selectedFromDate.compareTo(fromDate) < 0 || selectedFromDate.compareTo(toDate) > 0) {
-                return false;
-            }
-        }
-
-        int minStayDays = 0;
-        Pattern pattern = Pattern.compile("\\((\\d+)[^\\d]*\\)");
-        Matcher matcher = pattern.matcher(minStay.getText());
-        if (matcher.find())
-        {
-            minStayDays = Integer.parseInt(matcher.group(1));
-        }
-
-        if (selectedFromDate.plusDays(minStayDays -1).compareTo(selectedToDate) < 0) {
-            return false;
-        }
-
-        int maxStayDays = 0;
-        matcher = pattern.matcher(maxStay.getText());
-        if (matcher.find())
-        {
-            maxStayDays = Integer.parseInt(matcher.group(1));
-        }
-
-        if (selectedFromDate.plusDays(maxStayDays -1).compareTo(selectedToDate) > 0) {
-            return false;
-        }
-
-        LocalDate availableDate = LocalDate.now();
-        pattern = Pattern.compile("[^Available: ].*");
-        matcher = pattern.matcher(availabilityDate.getText());
-        if (matcher.find()) {
-            availableDate = LocalDate.parse(matcher.group(1));
-        }
-
-        if(selectedFromDate.compareTo(availableDate) < 0) {
-            return false;
-        }
-
-        return true;
-    }
-
     public void selectValidDates() {
-        LocalDate fromDate = LocalDate.parse(validFromDate.getText());
-        LocalDate toDate = LocalDate.parse(validToDate.getText());
+        try {
+            LocalDate dateFromToSelect = getValidDateFrom();
+            LocalDate dateToToSelect = getValidDateTo(dateFromToSelect);
 
-
+            new DatePicker(dateSelector).selectDateFrom(dateFromToSelect.getYear(), dateFromToSelect.getMonth().getValue(), dateFromToSelect.getDayOfMonth());
+            new DatePicker(dateSelector).selectDateTo(dateToToSelect.getYear(), dateToToSelect.getMonth().getValue(), dateToToSelect.getDayOfMonth());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean areSelectedDatesValid() {
-        //return getBrowser().getDriver().findElements(By.cssSelector("a.button--book-now")).size() > 0;
-        boolean isBookNowDisplayed = false;
-        try {
-            isBookNowDisplayed = bookNowButton.isDisplayed();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return isBookNowDisplayed;
+        return WebElementExtension.isDisplayed(bookNowButton);
     }
 
     public void book() {
         ((JavascriptExecutor)getBrowser().getDriver()).executeScript("arguments[0].scrollIntoView(true);", dateSelector);
         bookNowButton.click();
+    }
+
+    private LocalDate getValidDateFrom() throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMMM dd, yyyy", Locale.ENGLISH);
+
+        Date parsedDateFrom = sdf.parse(validDateFrom.getText());
+        LocalDate dateFrom = parsedDateFrom.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        Date parsedDateTo = sdf.parse(validDateTo.getText());
+        LocalDate dateTo = parsedDateTo.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return DateRandomizer.randomDate(dateFrom, dateTo);
+    }
+
+    private LocalDate getValidDateTo(LocalDate minDate) {
+        int minStayDays = 0;
+        int maxStayDays = 0;
+        Pattern pattern = Pattern.compile("\\((\\d+)[^\\d]*\\)");
+        Matcher minStayDaysMatcher = pattern.matcher(minStay.getText());
+        Matcher maxStayDaysMatcher = pattern.matcher(maxStay.getText());
+
+        if (minStayDaysMatcher.find()) {
+            minStayDays = Integer.parseInt(minStayDaysMatcher.group(1));
+        }
+
+        if (maxStayDaysMatcher.find()) {
+            maxStayDays = Integer.parseInt(maxStayDaysMatcher.group(1));
+        }
+
+        return DateRandomizer.randomDate(minDate, minStayDays, maxStayDays);
     }
 }

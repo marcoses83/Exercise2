@@ -24,52 +24,52 @@ public class DatePicker {
     }
 
     private void expandDateFromSelector() {
-        WebElement dateFromSelector = this.dateSelector.findElement(By.xpath("input[1]"));
+        WebElement dateFromSelector = dateSelector.findElement(By.xpath("input[1]"));
         dateFromSelector.click();
     }
 
     private void selectYearFrom(int year) {
         expandDateFromSelector();
-        WebElement yearFromSelector = this.dateSelector.findElement(By.xpath("div[1]//select[@class='pika-select pika-select-year']"));
+        WebElement yearFromSelector = dateSelector.findElement(By.xpath("div[1]//select[@class='pika-select pika-select-year']"));
         Select selectObject = new Select(yearFromSelector);
         selectObject.selectByValue(String.valueOf(year));
     }
 
     private void selectMonthFrom(int month) {
         expandDateFromSelector();
-        WebElement monthFromSelector = this.dateSelector.findElement(By.xpath("div[1]//select[@class='pika-select pika-select-month']"));
+        WebElement monthFromSelector = dateSelector.findElement(By.xpath("div[1]//select[@class='pika-select pika-select-month']"));
         Select selectObject = new Select(monthFromSelector);
         selectObject.selectByValue(String.valueOf(month - 1));
     }
 
     private void selectDayFrom(int day) {
         expandDateFromSelector();
-        WebElement dayFromCells = this.dateSelector.findElement(By.xpath("div[1]//table[@class='pika-table']/tbody"));
+        WebElement dayFromCells = dateSelector.findElement(By.xpath("div[1]//table[@class='pika-table']/tbody"));
         dayFromCells.findElement(By.cssSelector("[data-pika-day='" + day + "']")).click();
     }
 
     private void expandDateToSelector() {
-        WebElement dateToSelector = this.dateSelector.findElement(By.xpath("input[2]"));
+        WebElement dateToSelector = dateSelector.findElement(By.xpath("input[2]"));
         dateToSelector.click();
     }
 
     private void selectYearTo(int year) {
         expandDateToSelector();
-        WebElement yearToSelector = this.dateSelector.findElement(By.xpath("div[2]//select[@class='pika-select pika-select-year']"));
+        WebElement yearToSelector = dateSelector.findElement(By.xpath("div[2]//select[@class='pika-select pika-select-year']"));
         Select selectObject = new Select(yearToSelector);
         selectObject.selectByValue(String.valueOf(year));
     }
 
     private void selectMonthTo(int month) {
         expandDateToSelector();
-        WebElement monthToSelector = this.dateSelector.findElement(By.xpath("div[2]//select[@class='pika-select pika-select-month']"));
+        WebElement monthToSelector = dateSelector.findElement(By.xpath("div[2]//select[@class='pika-select pika-select-month']"));
         Select selectObject = new Select(monthToSelector);
         selectObject.selectByValue(String.valueOf(month -1));
     }
 
     private void selectDayTo(int day) {
         expandDateToSelector();
-        WebElement dayToCells = this.dateSelector.findElement(By.xpath("div[2]//table[@class='pika-table']/tbody"));
+        WebElement dayToCells = dateSelector.findElement(By.xpath("div[2]//table[@class='pika-table']/tbody"));
 
         dayToCells.findElement(By.cssSelector("[data-pika-day='" + day + "']")).click();
     }
